@@ -1,0 +1,35 @@
+{
+  "name": "starks/starks",
+  "description": "Starks Fitness Website",
+  "type": "project",
+  "authors": [
+    {
+      "name": "John Riordan",
+      "email": "john.riordan@spinhalf.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "spinhalf-com/mindbody-php-api" : "master",
+    "Nesbot/Carbon" : "master-dev"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "3.7.*"
+  },
+  "repositories": [
+    { "type": "vcs", "url": "https://github.com/spinhalf-com/mindbody-php-api" }
+  ],
+  "autoload": {
+    "classmap": [
+
+    ],
+    "psr-4": {
+      "Classes\\": "classes/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  }
+}

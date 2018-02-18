@@ -1,0 +1,81 @@
+here are some login details which will hopefully come in handy.
+
+
+
+*This is the clients live MB account
+
+
+https://developers.mindbodyonline.com/Home/LogIn
+
+// link for Starks Fitness
+https://clients.mindbodyonline.com/classic/ws?studioid=273100
+username: james@starksfitness.co.uk
+password: SFmindbody-17
+
+
+
+
+
+// link for Sandbox Site
+https://clients.mindbodyonline.com/classic/ws?studioid=-99
+username: Siteowner
+password: apitest1234
+
+
+
+
+
+
+
+
+This repo might be useful: https://github.com/devincrossman/mindbody-php-api
+
+It allows you to connect to MindBody - here is some sample code:
+
+
+$validate_login = $mb->ValidateLogin(array(
+'Username' => $login_email,
+'Password' => $login_password,
+));
+
+if(!empty($validate_login['ValidateLoginResult']['GUID'])) {
+$client_id = $validate_login['ValidateLoginResult']['Client']['ID'];
+$options = array(
+'Test' => 'true',
+'ClientID' => $client_id,
+'CartItems'=>array(
+'CartItem'=>array(
+'Quantity'=>1,
+'Item' => new SoapVar(
+array(
+'ID'=> 352,
+'DiscountPercentage'=> 0,
+'SellOnline'=> 'true'
+),
+SOAP_ENC_ARRAY,
+'Package',
+'http://clients.mindbodyonline.com/api/0_5'
+),
+'DiscountAmount' => 0,
+)
+),
+'Payments' => array(
+'PaymentInfo' => new SoapVar(
+array(
+'CreditCardNumber'=>'4111111111111111',
+'ExpYear'=>'2020',
+'ExpMonth'=>'06',
+'Amount'=>'560',
+'BillingAddress'=>'Address',
+'BillingPostalCode'=>'BS6 1UN'
+),
+SOAP_ENC_ARRAY,
+'CreditCardInfo',
+'http://clients.mindbodyonline.com/api/0_5'
+)
+)
+);
+$data = $mb->CheckoutShoppingCart($options);
+starks_dump($data);
+}
+
