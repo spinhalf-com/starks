@@ -1,0 +1,156 @@
+
+The site doesn't communicate with the MindBody API except for the MB widgets such as the one currently on: https://starksfitness.co.uk.
+
+What we need on the site is a method for people to buy a contract as the MB widgets don't support this.
+
+The way that I was thinking it could be approached is like I've sketched out below.
+
+On the home page will have a button 'Trial Month', which should open a modal which ask
+
+    MODAL 1:
+
+    Email ______________
+    Password ______________
+    [ SIGN UP ]
+
+    - or -
+
+    [ CREATE ACCOUNT ]
+
+
+if they already have an account then they login with their email and password then they skip to MODAL 3 otherwise they sign up
+
+    MODAL 2:
+
+    First name  ______________
+    Last name   ______________
+    Address ______________
+    Postcode ______________
+
+
+etc. (I believe there are a set of questions that one needs to complete to create an account.)
+
+    MODAL 3:
+
+    Card number ______________
+    Expiry date ______________
+    CVV ______________
+    etc.
+
+    [ PAY NOW ]
+
+
+
+From a code point of view, there are lot of ways of doing things but was expecting something along the lines of this:
+
+
+This is a block of code that we drop in the page which has the initial button and the modals. We would style the form to suit the site, you'd just need to make sure the required fields are in the forms. We'd style the modals to be hidden by default.
+
+<!-- start -->
+
+<a id="trial-month-button" href="#trial-month">Sign up for Trial Month</a>';
+
+<div class="modal" id="modal-one">
+Email <input type="text" id="email" name="email"><br />
+Password <input type="password" id="email" name="email"><br />
+<input type="button" id="modal-one-sign-up" value=""><br />
+<div id="modal-one error-message"></div>
+<button id="modal-one-sign-up">SIGN UP</button>
+- or -<br />
+<button id="modal-one-create-account">CREATE ACCOUNT</button>
+</div>
+
+<div class="modal" id="modal-two">
+First name <input type="text" id="firstname" name="firstname"><br />
+Last name <input type="text" id="lastname" name="lastname"><br />
+Address <input type="text" id="address" name="address"><br />
+<!-- etc -->
+<button id="modal-two-create-account">CREATE ACCOUNT</button>
+</div>
+
+<div class="modal" id="modal-three">
+Card number <input type="text" id="cardnumber" name="cardnumber"><br />
+Expiry date <input type="text" id="lastname" name="lastname"><br />
+Address <input type="text" id="address" name="address"><br />
+<!-- etc -->
+<button id="modal-three-buy-now">BUY NOW</button>
+</div>
+
+<!-- end -->
+
+We'd then use jQuery to wire this together
+
+<!-- start -->
+
+(function($) {
+$('#trial-month-button').on('click', function(e) {
+e.preventDefault();
+$('#modal-one').show();
+});
+
+$('#modal-one-sign-up').on('click', function() {
+var email = $('#email').val();
+var password = $('#password').val();
+// validation of values goes here
+
+$.ajax({
+  method: "POST",
+  url: "/function-validate-login.php",
+  data: {
+  email: email,
+  password: password
+  }
+}).done(function( msg ) {
+
+if (msg == 'SUCCESS') {
+$('#modal-one').hide();
+$('#modal-three').show();
+} else {
+$('#modal-one error-message').html(msg);
+}
+
+});
+
+});
+
+// etc
+
+
+})( jQuery );
+
+<!-- end -->
+
+And then there would be some PHP scripts that get feed the form data and connect to the MB API
+
+<!-- start -->
+
+/* this one takes the email and password and checks the login */
+
+require('MBFUNCTIONS_config.php');
+require('MBFUNCTIONS_functions.php');
+
+$email = $_REQUEST['email'];
+$password = $_REQUEST['password'];
+
+$validate_login = $mb->ValidateLogin(array(
+'Username' => $email,
+'Password' => $password,
+));
+
+if(!empty($validate_login['ValidateLoginResult']['GUID'])) {
+
+echo 'SUCCESS';
+
+} else {
+echo 'FAILURE MESSAGE';
+
+}
+
+<!-- end -->
+
+Each process would then have a different function/script for the $.ajax to target.
+
+We can sort the CSS and jQuery side of things, we just need to know what goes in each of the forms and then functions that we can target.
+
+Does that make it clearer what we’re looking for? I’ve sketched things broadly as to how it should fit together. There’s a method within WordPress called Admin_Ajax for calling functions in the theme’s functions.php using an $.ajax call from JS which we’d use to connect things. The process is the same - JS passes data to PHP script, PHP script returns results, JS updates page.
+

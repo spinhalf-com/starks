@@ -9,47 +9,64 @@
 include './includes/credentials/credentials.php';
 include_once './classes/MbInterfaceClass.php';
 
+$mbConnection           = new classes\MbInterfaceClass();
+$mbConnection->setSourceCredentials($sourceCreds);
+$mbConnection->setUserCredentials($userCreds);
+
+$cardsList              = $mbConnection->getAcceptedCardTypes();
+$contracts              = $mbConnection->getContracts(-99);
+
+$contractsList          = ($contracts["GetContractsResult"]["Contracts"]);
+
 if(isset($_POST['purchase_contract']))
 {
-    $mbConnection           = new classes\MbInterfaceClass();
-    $mbConnection->setSourceCredentials($sourceCreds);
-    $mbConnection->setUserCredentials($userCreds);
+    $client             = $mbConnection->getClientByEmail(['XMLDetail' => 'Full', 'SearchText' => $_POST['email']]);
 
-    $soapRequestArray['PageSize']                   = 50;
-    $soapRequestArray['CurrentPageIndex']           = 0;
-    $soapRequestArray['XMLDetail']                  = 'Full';
-    $soapRequestArray['Test']                       = 'true';                     //set this to false when deploying to production
-    $soapRequestArray['ClientID']                   = $_POST['ClientID'];     //the client ID from the MB record
-    $soapRequestArray['ContractID']                 = $_POST['ContractID'];    // example 320
-    $soapRequestArray['LocationID']                 = $_POST['LocationID'];
-    $soapRequestArray['Amount']                     = $_POST['Amount'];
-    $soapRequestArray['FirstPaymentOccurs']         = $_POST['FirstPaymentOccurs'];
-
-    if(!isset($_POST['savedcc']))
+    if($client['clientId'] == false)
     {
-        $soapRequestArray['CreditCardNumber']           = $_POST['CreditCardNumber'];
-        $soapRequestArray['CreditCardExpMonth']         = $_POST['CreditCardExpMonth'];
-        $soapRequestArray['CreditCardExpYear']          = $_POST['CreditCardExpYear'];
-        $soapRequestArray['CustomerName']               = $_POST['CustomerName'];
-        $soapRequestArray['CustomerAddress']            = $_POST['CustomerAddress'];
-        $soapRequestArray['CustomerCity']               = $_POST['CustomerCity'];
+        $postMessage    = "Client not found";
+    }
+    else
+    {
+        $clientId       = $client['clientId'];
+
+        $soapRequestArray['PageSize']                   = 50;
+        $soapRequestArray['CurrentPageIndex']           = 0;
+        $soapRequestArray['XMLDetail']                  = 'Full';
+        $soapRequestArray['Test']                       = 'true';                     //set this to false when deploying to production
+        $soapRequestArray['ClientID']                   = $clientId;
+        $soapRequestArray['ContractID']                 = $_POST['ContractID'];    // example 320
+        $soapRequestArray['LocationID']                 = $_POST['LocationID'];     // get this from your source settings
+        $soapRequestArray['Amount']                     = $_POST['Amount'];
+        $soapRequestArray['FirstPaymentOccurs']         = $_POST['FirstPaymentOccurs'];
+        $soapRequestArray['Email']                      = $_POST['email'];                   // get this from the user session
+
+        if(!isset($_POST['savedcc']))
+        {
+            $soapRequestArray['CreditCardNumber']           = $_POST['CreditCardNumber'];
+            $soapRequestArray['CreditCardExpMonth']         = $_POST['CreditCardExpMonth'];
+            $soapRequestArray['CreditCardExpYear']          = $_POST['CreditCardExpYear'];
+            $soapRequestArray['CustomerName']               = $_POST['CustomerName'];
+            $soapRequestArray['CustomerAddress']            = $_POST['CustomerAddress'];
+            $soapRequestArray['CustomerCity']               = $_POST['CustomerCity'];
 //    $soapRequestArray['CustomerState']              = $_POST['CustomerState'];
-        $soapRequestArray['CustomerPostcode']           = $_POST['CustomerPostcode'];
+            $soapRequestArray['CustomerPostcode']           = $_POST['CustomerPostcode'];
 
-        $result                 = $mbConnection->purchaseContractWitNewCard($soapRequestArray);
-    }
-    else
-    {
-        $result                 = $mbConnection->purchaseContractWitSavedCard($soapRequestArray);
-    }
+            $result                 = $mbConnection->purchaseContractWithNewCard($soapRequestArray);
+        }
+        else
+        {
+            $result                 = $mbConnection->purchaseContractWithSavedCard($soapRequestArray);
+        }
 
-    if($result['status'] == '200')
-    {
-        $postMessage    = "Contract successfully purchased";
-    }
-    else
-    {
-        $postMessage    = "Failed: " . $result->body;
+        if($result['status'] == '200')
+        {
+            $postMessage    = "Contract successfully purchased";
+        }
+        else
+        {
+            $postMessage    = "Failed: " . $result->body;
+        }
     }
 }
 
@@ -76,6 +93,15 @@ if(isset($_POST['purchase_contract']))
 </head>
 <body>
 
+<ul>
+    <?php
+    foreach ($cardsList["GetAcceptedCardTypeResult"]["CardTypes"]["string"] as $card)
+    {
+        echo '<li>'. $card . '</li>';
+    }
+    ?>
+</ul>
+
 <form action="PurchaseContract.php" method="post">
     <table>
         <tr>
@@ -83,12 +109,23 @@ if(isset($_POST['purchase_contract']))
             <td><input class='cell' type="text" name="XMLDetail" value="Full"></td>
         </tr>
         <tr>
-            <td>Client ID</td>
-            <td><input class='cell' type="text" name="ClientID" value="100015062"></td>
+            <td>Client Email</td>
+            <td><input class='cell' type="text" name="email" value="jr@maxx.com"></td>
         </tr>
         <tr>
             <td>Contract ID</td>
-            <td><input class='cell' type="text" name="ContractID" value="320"></td>
+            <td>
+                <select name="ContractID">
+                    <option value="320">Sample Contract Example</option>        <!-- get rid of this once the contracts list below is populated -->
+                    <?php
+                        foreach( $contractsList as $k => $v)
+                        {
+                            echo "<option value='$k'>$v</option>";          // you might need me to talk you through this
+                        }
+                    ?>
+                </select>
+
+            </td>
         </tr>
         <tr>
             <td>Use Saved Credit Card?</td>

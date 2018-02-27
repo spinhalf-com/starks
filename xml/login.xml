@@ -1,0 +1,140 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+<soapenv:Header/>
+<soapenv:Body>
+    <ValidateLogin xmlns="http://clients.mindbodyonline.com/api/0_5_1">
+        <Request>
+            <SourceCredentials>
+                <SourceName>M3UCOM</SourceName>
+                <Password>X3T80OSbHVapZEf1iDZEjZNcm6I=</Password>
+                <SiteIDs>
+                    <int>-99</int>
+                </SiteIDs>
+            </SourceCredentials>
+            <Username>Siteowner</Username>
+            <Password>apitest1234</Password>
+        </Request>
+    </ValidateLogin>
+</soapenv:Body>
+</soapenv:Envelope>
+
+
+
+
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://clients.mindbodyonline.com/api/0_5_1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+    <AddOrUpdateClients>
+        <Request>
+            <SourceCredentials>
+                <SourceName>M3UCOM</SourceName>
+                <Password>X3T80OSbHVapZEf1iDZEjZNcm6I=</Password>
+                <SiteIDs>
+                    <int>-99</int>
+                </SiteIDs>
+            </SourceCredentials>
+            <UserCredentials>
+                <Username>Siteowner</Username>
+                <Password>apitest1234</Password>
+                <SiteIDs>
+                    <int>-99</int>
+                </SiteIDs>
+                <LocationID xsi:nil="true"/>
+            </UserCredentials>
+            <XMLDetail>Full</XMLDetail>
+            <PageSize>50</PageSize>
+            <CurrentPageIndex>0</CurrentPageIndex>
+            <Test>true</Test>
+            <Clients>
+                <Client>
+                    <ID>john-riordan-143999</ID>
+                    <FirstName>john</FirstName>
+                    <LastName>riordan</LastName>
+                    <Email>jr@max.com</Email>
+                    <BirthDate>1998-02-28</BirthDate>
+                </Client>
+            </Clients>
+            <SendEmail xsi:nil="true"/>
+        </Request>
+    </AddOrUpdateClients>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://clients.mindbodyonline.com/api/0_5_1">
+<soapenv:Header/>
+<soapenv:Body>
+    <AddOrUpdateClients>
+        <Request>
+            <SourceCredentials>
+                <SourceName>M3UCOM</SourceName>
+                <Password>X3T80OSbHVapZEf1iDZEjZNcm6I=</Password>
+                <SiteIDs>
+                    <int>-99</int>
+                </SiteIDs>
+            </SourceCredentials>
+            <UserCredentials>
+                <Username>Siteowner</Username>
+                <Password>apitest1234</Password>
+                <SiteIDs>
+                    <int>-99</int>
+                </SiteIDs>
+                <LocationID>0</LocationID>
+            </UserCredentials>
+            <XMLDetail>Full</XMLDetail>
+            <PageSize>10</PageSize>
+            <CurrentPageIndex>0</CurrentPageIndex>
+            <Clients>
+                <Client>
+                    <FirstName>Joe</FirstName>
+                    <LastName>Smith</LastName>
+                    <BirthDate>1989-12-31</BirthDate>
+                    <Email>testmail@test.com</Email>
+                </Client>
+            </Clients>
+        </Request>
+    </AddOrUpdateClients>
+</soapenv:Body>
+</soapenv:Envelope>
+
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<soap:Body>
+    <AddOrUpdateClientsResponse xmlns="http://clients.mindbodyonline.com/api/0_5_1">
+        <AddOrUpdateClientsResult>
+            <Status>Success</Status>
+            <ErrorCode>200</ErrorCode>
+            <XMLDetail>Full</XMLDetail>
+            <ResultCount>1</ResultCount>
+            <CurrentPageIndex>0</CurrentPageIndex>
+            <TotalPageCount>1</TotalPageCount>
+            <Clients>
+                <Client>
+                    <Username>johnriordan591603</Username>
+                    <MobileProvider xsi:nil="true"/>
+                    <AppointmentGenderPreference>None</AppointmentGenderPreference>
+                    <IsCompany>false</IsCompany>
+                    <LiabilityRelease>false</LiabilityRelease>
+                    <PromotionalEmailOptIn>true</PromotionalEmailOptIn>
+                    <CreationDate>2018-02-27T00:34:32.4266731-08:00</CreationDate>
+                    <Liability>
+                        <IsReleased>false</IsReleased>
+                        <AgreementDate xsi:nil="true"/>
+                        <ReleasedBy xsi:nil="true"/>
+                    </Liability>
+                    <UniqueID>100015650</UniqueID>
+                    <Action>Added</Action>
+                    <ID>100015650</ID>
+                    <FirstName>john</FirstName>
+                    <LastName>riordan</LastName>
+                    <Email>jr@m3u.com</Email>
+                    <EmailOptIn>false</EmailOptIn>
+                    <State>CA</State>
+                    <Country>US</Country>
+                    <BirthDate>1998-02-28T00:00:00</BirthDate>
+                    <FirstAppointmentDate>2018-02-27T00:34:32.4276732-08:00</FirstAppointmentDate>
+                    <PhotoURL>https://clients.mindbodyonline.com/studios/DemoAPISandboxRestore/clients/100015650_large.jpg?v=95</PhotoURL>
+                    <IsProspect>false</IsProspect>
+                    <ContactMethod>1</ContactMethod>
+                </Client>
+            </Clients>
+        </AddOrUpdateClientsResult>
+    </AddOrUpdateClientsResponse>
+</soap:Body>
+</soap:Envelope>
