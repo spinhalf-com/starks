@@ -85,6 +85,26 @@ if(isset($_POST['purchase_contract']))
         .cellSmall{
             width: 100px;
         }
+
+        .cards{
+            font-family: Verdana;
+            padding:10px;
+            width: 500px;
+            background: beige;
+            border: 1px darkgrey;
+            border-radius: 10px;
+            margin:5px;
+        }
+
+        .form{
+            font-family: Verdana;
+            padding:10px;
+            width: 500px;
+            background: beige;
+            border: 1px darkgrey;
+            border-radius: 10px;
+            margin:5px;
+        }
     </style>
 
     <script src="//code.jquery.com/jquery-latest.js"></script>
@@ -92,6 +112,10 @@ if(isset($_POST['purchase_contract']))
 
 </head>
 <body>
+
+
+<div class="cards">
+<h3>Accepted Card Types</h3>
 
 <ul>
     <?php
@@ -101,7 +125,8 @@ if(isset($_POST['purchase_contract']))
     }
     ?>
 </ul>
-
+</div>
+<div class="form">
 <form action="PurchaseContract.php" method="post">
     <table>
         <tr>
@@ -187,6 +212,7 @@ if(isset($_POST['purchase_contract']))
         </tr>
     </table>
 </form>
+</div>
 
 </body>
 
