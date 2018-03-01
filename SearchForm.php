@@ -23,6 +23,8 @@ if(isset($_POST['esearch_form']))
 
     $result                 = $mbConnection->getClientByID($soapRequestArray);
 
+    die(json_encode($mbConnection->getClientFields()));
+
 //    die(json_encode($result));
 
     if($result['status'] == '200')

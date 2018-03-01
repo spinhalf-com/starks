@@ -37,16 +37,18 @@ class MbInterfaceClass
 
     protected function getMbObject()
     {
-        $mb                     = new MB_API($this->sourceCredentials, $this->userCredentials);
+        $mb                     = new MB_API($this->sourceCredentials);
 
         return $mb;
     }
 
-    public function consumerLogin()
+    public function consumerLogin($soapRequestArray)
     {
-        $this->mb->ValidateLogin($this->consumerCredentials);
+        $mb                         = $this->getMbObject();
 
-        return $this->mb;
+        $login                      = $mb->ValidateLogin($soapRequestArray);
+
+        return $login;
     }
 
     public function getClientByID($soapRequestArray)
@@ -76,6 +78,8 @@ class MbInterfaceClass
         try
         {
             $getClientRequest           = $mb->GetClients($soapRequestArray);
+
+//            die(json_encode($getClientRequest));
 
             if($getClientRequest['GetClientsResult']['ResultCount'] > 0)
             {
@@ -110,7 +114,7 @@ class MbInterfaceClass
 
         $checkArray['PageSize']                   = 50;
         $checkArray['CurrentPageIndex']           = 0;
-        $checkArray['XMLDetail']                  = 'Full';
+//        $checkArray['XMLDetail']                  = 'Full';
         $checkArray['SearchText']                 = $soapRequestArray['Email'];
 
         $existingClient                 = $this->getClientByEmail($checkArray);
@@ -121,9 +125,22 @@ class MbInterfaceClass
         $clientArray['LastName']        = $soapRequestArray['LastName'];
         $clientArray['BirthDate']       = $soapRequestArray['BirthDate'];
         $clientArray['Email']           = $soapRequestArray['Email'];
-        $clientArray['Username']        = $soapRequestArray['Email'];
+        $clientArray['Username']        = $this->makeUserName($soapRequestArray['FirstName'], $soapRequestArray['LastName']);
         $clientArray['Password']        = $soapRequestArray['Password'];
         $clientArray['Status']          = 'Inactive';
+        $clientArray['AddressLine1']    = $soapRequestArray['AddressLine1'];
+        $clientArray['City']            = $soapRequestArray['City'];
+        $clientArray['State']           = $soapRequestArray['State'];
+        $clientArray['PostalCode']      = $soapRequestArray['PostalCode'];
+        $clientArray['MobilePhone']     = $soapRequestArray['MobilePhone'];
+        $clientArray['ReferredBy']      = $soapRequestArray['ReferredBy'];
+
+//        $clientArray['HomePhone']        = '00000000000';
+//        $clientArray['WorkPhone']        = '00000000000';
+//        $clientArray['MiddleName']       = 'name';
+//        $clientArray['EmergContact']     = '01123547584';
+//        $clientArray['Gender']           = 'Male';
+//        $clientArray['IsMale']           = true;
 
         if($existingClient['body']['GetClientsResult']['ResultCount'] > 0)
         {
@@ -135,6 +152,7 @@ class MbInterfaceClass
             {
                 $clientArray['ID'] = $existingClient['body']['GetClientsResult']['Clients']['Client'][0]['ID'];
             }
+//            die(json_encode($clientArray));
         }
 
         try

@@ -9,7 +9,7 @@
 include './includes/credentials/credentials.php';
 include_once './classes/MbInterfaceClass.php';
 
-if(isset($_POST['login_form']))
+if(isset($_POST['search_form']))
 {
     $mbConnection           = new classes\MbInterfaceClass();
     $mbConnection->setSourceCredentials($sourceCreds);
@@ -64,13 +64,9 @@ if(isset($_POST['login_form']))
             <td>Email</td>
             <td><input class='cell' type="text" name="email" value="jr@m3u.com"></td>
         </tr>
-        <tr>
-            <td>Password</td>
-            <td><input class='cell' type="text" name="password" value=""></td>
-        </tr>
 
         <tr>
-            <td><input type="hidden" name="login_form"></td>
+            <td><input type="hidden" name="search_form"></td>
             <td><input type="submit" value="Submit"></td>
         </tr>
         <tr>
