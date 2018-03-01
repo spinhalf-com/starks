@@ -6,7 +6,6 @@
  * Time: 18:25
  */
 require './vendor/autoload.php';
-require 'MbInterfaceClassContract.php';
 require 'MbClassValidator.php';
 
 use Classes\MbInterfaceClassContract;
@@ -14,7 +13,7 @@ use Classes\MbClassValidator;
 use DevinCrossman\Mindbody\MB_API;
 use Carbon\Carbon;
 
-class MbInterfaceClass //implements MbInterfaceClassContract
+class MbInterfaceClass
 {
     public $sourceCredentials;
     public $userCredentials;
@@ -23,12 +22,12 @@ class MbInterfaceClass //implements MbInterfaceClassContract
 
     public function setSourceCredentials($sourceCredentials)
     {
-        $this->sourceCredentials    = $sourceCredentials;
+        $this->sourceCredentials        = $sourceCredentials;
     }
 
     public function setUserCredentials($userCredentials)
     {
-        $this->userCredentials      = $userCredentials;
+        $this->userCredentials          = $userCredentials;
     }
 
     public function setConsumerCredentials($consumerCredentials)
@@ -78,9 +77,16 @@ class MbInterfaceClass //implements MbInterfaceClassContract
         {
             $getClientRequest           = $mb->GetClients($soapRequestArray);
 
-            if(array_key_exists('ID', $getClientRequest['GetClientsResult']['Clients']['Client']))
+            if($getClientRequest['GetClientsResult']['ResultCount'] > 0)
             {
-                $id = ($getClientRequest['GetClientsResult']['Clients']['Client']['ID']);
+                if (array_key_exists('ID', $getClientRequest['GetClientsResult']['Clients']['Client']))
+                {
+                    $id = ($getClientRequest['GetClientsResult']['Clients']['Client']['ID']);
+                }
+                else
+                {
+                    $id = false;
+                }
             }
             else
             {
