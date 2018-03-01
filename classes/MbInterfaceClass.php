@@ -79,20 +79,12 @@ class MbInterfaceClass
 
             if($getClientRequest['GetClientsResult']['ResultCount'] > 0)
             {
-                if (array_key_exists('ID', $getClientRequest['GetClientsResult']['Clients']['Client']))
-                {
-                    $id = ($getClientRequest['GetClientsResult']['Clients']['Client']['ID']);
-                }
-                else
-                {
-                    $id = false;
-                }
+                $id = (array_key_exists('ID', $getClientRequest['GetClientsResult']['Clients']['Client'])) ? $getClientRequest['GetClientsResult']['Clients']['Client']['ID'] : false;
             }
             else
             {
                 $id = false;
             }
-
             return ['status' => $getClientRequest['GetClientsResult']['Status'], 'body' => $getClientRequest, 'clientId' => $id];
         }
         catch (SoapFault $s)
